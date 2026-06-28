@@ -1,0 +1,35 @@
+fecha,local,visitante,goles_local,goles_visitante
+2024-01-01,Argentina,Francia,2,1
+2024-01-02,Brasil,Alemania,1,5
+2024-01-03,España,Portugal,2,2
+2024-01-04,Bélgica,Inglaterra,0,1
+2024-01-05,Países Bajos,Croacia,2,3
+2024-01-06,Colombia,Ecuador,1,0
+2024-01-07,Paraguay,Mexico,1,1
+2024-01-08,Estados Unidos,Canadá,2,0
+2024-01-09,Japón,Australia,3,1
+2024-01-10,Arabia Saudita,Egipto,1,2
+2024-01-11,Marruecos,Argelia,1,0
+2024-01-12,Senegal,Costa Marfil,2,2
+2024-01-13,Ghana,Sudáfrica,1,0
+2024-01-14,RD Congo,Cabo Verde,0,0
+2024-01-15,Dinamarca,Suecia,1,1
+2024-01-16,Noruega,Bosnia,2,0
+2024-01-17,Polonia,Tunez,1,0
+2024-02-01,Argentina,Brasil,2,0
+2024-02-02,Francia,Alemania,2,1
+2024-02-03,España,Bélgica,1,0
+2024-02-04,Portugal,Inglaterra,1,2
+2024-02-05,Países Bajos,Dinamarca,3,1
+2024-02-06,Croacia,Suecia,2,0
+2024-02-07,Colombia,Paraguay,2,0
+2024-02-08,Ecuador,Mexico,1,1
+2024-02-09,Estados Unidos,Japón,1,2
+2024-02-10,Canadá,Australia,0,1
+2024-02-11,Marruecos,Senegal,1,1
+2024-02-12,Argelia,Costa Marfil,0,2
+2024-02-13,Egipto,Ghana,2,1
+2024-02-14,Arabia Saudita,Sudáfrica,1,0
+2024-02-15,RD Congo,Tunez,0,1
+2024-02-16,Cabo Verde,Bosnia,1,0
+2024-02-17,Noruega,Polonia,1,2
