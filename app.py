@@ -1,5 +1,4 @@
 import streamlit as st
-import streamlit.components.v1 as components
 import random
 
 # Configuración de la pantalla
@@ -38,23 +37,3 @@ if st.button("🔮 Calcular Predicción", use_container_width=True):
             st.success(f"🏆 Favorito: El análisis favorece a **{equipo_a}**.")
         else:
             st.success(f"🏆 Favorito: El análisis favorece a **{equipo_b}**.")
-
-# =========================================================================
-# 💰 ESPACIO PUBLICITARIO (Aquí es donde sumás tus ganancias)
-# =========================================================================
-st.markdown("<br><br><hr>", unsafe_allow_html=True)
-st.caption("📢 Enlaces Patrocinados")
-
-# Cuando una red de anuncios (como Adsterra) te apruebe la web,
-# solo cambiás este bloque de texto por el código HTML real que ellos te den.
-codigo_anuncio = """
-<div style="text-align:center; background-color:#f0f2f6; padding:10px; border-radius:5px; border: 1px dashed #31333F;">
-    <p style="color:#31333F; font-size:11px; margin:0 0 5px 0; font-weight:bold;">ANUNCIO PUBLICITARIO</p>
-    <a href="https://www.google.com" target="_blank">
-        <img src="https://via.placeholder.com/320x50.png?text=Tu+Anuncio+Aca+Disponible" alt="Anuncio de prueba" style="max-width:100%; height:auto;">
-    </a>
-</div>
-"""
-
-# Muestra el banner publicitario en pantalla
-components.html(codigo_anuncio, height=90)
