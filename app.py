@@ -24,7 +24,7 @@ if "premium_estandar" not in st.session_state:
 if "premium_experto" not in st.session_state:
     st.session_state["premium_experto"] = False
 
-# 1. Intento de validación automática por link
+# Validación automática por link
 if "status" in parametros and parametros["status"] == "approved":
     tipo_suscripcion = parametros.get("plan", "ninguno")
     if tipo_suscripcion == "mensual_estandar":
@@ -72,22 +72,29 @@ if opcion == "🔮 Generar Predicción":
             st.write(f"🔹 **{equipo_b}:** {prob_b}%")
             st.write(f"🔹 **Empate:** {prob_empate}%")
 
-# PESTAÑA 2: PARTIDOS EN VIVO
+# PESTAÑA 2: PARTIDOS EN VIVO (VERSION OPTIMIZADA PARA ANDROID)
 elif opcion == "📺 Partidos en Vivo":
     st.title("📺 Marcador en Directo")
     st.write("Seguí los resultados del fútbol mundial en tiempo real.")
+    
+    # Botón de seguridad: Abre el marcador nativo externo (100% efectivo en Android)
+    st.link_button("🚀 Abrir Marcador en Vivo (Pantalla Completa)", "https://www.scoreaxis.com/live-scores", type="primary", use_container_width=True)
+    
+    st.markdown("---")
+    st.caption("🤖 Versión integrada (si tu celular la bloquea, usa el botón de arriba):")
+    
+    # Código reducido y optimizado sin parámetros pesados para evitar el Error 500
     html_marcador = """
-    <iframe src="https://www.scoreaxis.com/widget/live-match-center?autoHeight=1&amp;bodyBackground=%231a1a1a&amp;textColor=%23ffffff" 
-            width="100%" height="600" style="border:none;" id="scoreaxis-widget">
+    <iframe src="https://www.scoreaxis.com/widget/live-match-center?bodyBackground=%231a1a1a&textColor=%23ffffff" 
+            width="100%" height="500" style="border:none; border-radius:8px;">
     </iframe>
     """
-    components.html(html_marcador, height=650, scrolling=True)
+    components.html(html_marcador, height=520, scrolling=False)
 
 # PESTAÑA 3: HISTORIAL PREMIUM
 elif opcion == "📜 Historial Premium":
     st.title("📜 Centro de Datos Premium")
     
-    # Renderizar contenido si está activo por cualquier método
     if st.session_state["premium_experto"]:
         st.success("👑 ¡Suscripción EXPERTO VIP Activa!")
         tab1, tab2 = st.tabs(["🗂️ Historial General", "🔥 Datos de Oro (Expertos)"])
@@ -97,13 +104,11 @@ elif opcion == "📜 Historial Premium":
         with tab2:
             st.subheader("💡 Consejos de Simulación Avanzada")
             st.info("📌 **Tendencia:** Alta probabilidad de menos de 2.5 goles en el próximo partido de Argentina.")
-            st.info("📌 **Alerta:** Alemania muestra un rendimiento simulado superior al 60% este mes.")
 
     elif st.session_state["premium_estandar"]:
         st.success("🔓 ¡Suscripción Estándar Activa!")
         st.subheader("🗂️ Registro de Predicciones Recientes")
         st.write("📅 *Historial* | ⚔️ **Argentina** (52%) vs **Brasil** (38%) | Empate: 10%")
-        st.write("📅 *Historial* | ⚔️ **Francia** (45%) vs **España** (40%) | Empate: 15%")
         st.markdown("---")
         st.warning("⭐ ¿Querés los consejos de apuestas del Plan Experto?")
         st.link_button("🚀 Subir a Plan Experto", LINK_SUSCRIPCION_EXPERTO, use_container_width=True)
@@ -112,7 +117,6 @@ elif opcion == "📜 Historial Premium":
         st.error("🔒 Sección Exclusiva por Suscripción")
         st.write("Suscribite para desbloquear las herramientas estadísticas. Podés cancelar cuando quieras.")
         
-        # Muro de pago con los dos planes fijados
         col1, col2 = st.columns(2)
         with col1:
             st.markdown("### 🥉 Plan Estándar\n**$1.890 / mes**")
@@ -125,7 +129,6 @@ elif opcion == "📜 Historial Premium":
             st.write("🔥 **Consejos de apuestas y alertas.**")
             st.link_button("⚡ ¡Suscribirme Experto!", LINK_SUSCRIPCION_EXPERTO, type="primary", use_container_width=True)
             
-        # 🔑 SECCIÓN DE RESPALDO MANUAL
         st.markdown("---")
         st.caption("¿Ya pagaste y no se desbloqueó automáticamente? Ingresá el código que te envió el administrador:")
         codigo_ingresado = st.text_input("🔑 Código de activación:", type="password")
@@ -139,4 +142,4 @@ elif opcion == "📜 Historial Premium":
             st.rerun()
         elif codigo_ingresado != "":
             st.error("Código incorrecto. Verificalo con el administrador.")
-    
+        
