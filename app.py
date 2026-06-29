@@ -5,8 +5,8 @@ import random
 # ⚠️ CONFIGURACIÓN: REEMPLAZÁ LO QUE ESTÁ ENTRE COMILLAS POR TUS LINKS REALES
 # Asegurate de que no quede ningún espacio en blanco al inicio de estas líneas.
 # =========================================================================
-LINK_ESTANDAR = "https://www.mercadopago.com.ar"
-LINK_EXPERTO = "https://www.mercadopago.com.ar"
+LINK_ESTANDAR = "https://mpago.la/2Qg9r9o"
+LINK_EXPERTO = "https://mpago.la/21S6rF8"
 
 # Claves para activación manual de respaldo
 CLAVE_ESTANDAR = "ESTANDAR2026"
