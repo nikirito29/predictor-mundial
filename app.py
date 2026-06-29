@@ -2,12 +2,18 @@ import streamlit as st
 import random
 import streamlit.components.v1 as components
 
-# Configuración de la pantalla
-st.set_page_config(page_title="Predictor Mundial", page_icon="⚽", layout="centered")
+# =========================================================================
+# ⚠️ CONFIGURACIÓN: Pegá tus links acá (VAN SIN ESPACIOS AL PRINCIPIO)
+# =========================================================================
+LINK_SUSCRIPCION_ESTANDAR = "https://www.mercadopago.com.ar/subscriptions/tu-link-suscripcion-estandar"
+LINK_SUSCRIPCION_EXPERTO = "https://www.mercadopago.com.ar/subscriptions/tu-link-suscripcion-experto"
 
 # =========================================================================
 # 💳 CONTROL DE ACCESO AUTOMÁTICO POR SUSCRIPCIÓN
 # =========================================================================
+# Configuración de la pantalla
+st.set_page_config(page_title="Predictor Mundial", page_icon="⚽", layout="centered")
+
 parametros = st.query_params
 
 if "premium_estandar" not in st.session_state:
@@ -19,15 +25,11 @@ if "premium_experto" not in st.session_state:
 if "status" in parametros and parametros["status"] == "approved":
     tipo_suscripcion = parametros.get("plan", "ninguno")
     if tipo_suscripcion == "mensual_estandar":
-    LINK_SUSCRIPCION_ESTANDAR = "https://www.mercadopago.com.ar/subscriptions/TU_LINK_REAL_ACA"
-LINK_SUSCRIPCION_EXPERTO = "https://www.mercadopago.com.ar/subscriptions/TU_LINK_REAL_ACA"
+        st.session_state["premium_estandar"] = True
     elif tipo_suscripcion == "mensual_experto":
         st.session_state["premium_estandar"] = True
         st.session_state["premium_experto"] = True
 
-# ⚠️ CONFIGURACIÓN: Pegá acá tus dos links de SUSCRIPCIÓN de Mercado Pago
-LINK_SUSCRIPCION_ESTANDAR = "https://www.mercadopago.com.ar/subscriptions/tu-link-suscripcion-estandar"
-LINK_SUSCRIPCION_EXPERTO = "https://www.mercadopago.com.ar/subscriptions/tu-link-suscripcion-experto"
 # =========================================================================
 # ☰ MENÚ DE NAVEGACIÓN
 # =========================================================================
@@ -108,12 +110,12 @@ elif opcion == "📜 Historial Premium":
         
         col1, col2 = st.columns(2)
         with col1:
-            st.markdown("### 🥉 Plan Estándar\n**$1.490 / mes**")
+            st.markdown("### 🥉 Plan Estándar\n**$1.890 / mes**")
             st.write("✅ Historial completo de partidos.")
             st.link_button("💳 Suscribirme Estándar", LINK_SUSCRIPCION_ESTANDAR, use_container_width=True)
             
         with col2:
-            st.markdown("### 🥇 Plan Experto\n**$2.990 / mes**")
+            st.markdown("### 🥇 Plan Experto\n**$3.890 / mes**")
             st.write("✅ Todo lo del plan Estándar.")
             st.write("🔥 **Consejos de apuestas y alertas.**")
             st.link_button("⚡ ¡Suscribirme Experto!", LINK_SUSCRIPCION_EXPERTO, type="primary", use_container_width=True)
