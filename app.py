@@ -1,19 +1,18 @@
 import streamlit as st
 import random
-import streamlit.components.v1 as components
 
 # =========================================================================
-# ⚠️ CONFIGURACIÓN: Pegá tus links reales acá (sin espacios al principio)
+# ⚠️ CONFIGURACIÓN: Pegá tus links reales acá (van pegados al borde izquierdo)
 # =========================================================================
-LINK_SUSCRIPCION_ESTANDAR = "https://www.mercadopago.com.ar/subscriptions/tu-link-suscripcion-estandar"
-LINK_SUSCRIPCION_EXPERTO = "https://www.mercadopago.com.ar/subscriptions/tu-link-suscripcion-experto"
+LINK_ESTANDAR = "https://www.mercadopago.com.ar/subscriptions/tu-link-suscripcion-estandar"
+LINK_EXPERTO = "https://www.mercadopago.com.ar/subscriptions/tu-link-suscripcion-experto"
 
-# Claves de respaldo manual por si falla la redirección automática
-CLAVE_MANUAL_ESTANDAR = "ESTANDAR2026"
-CLAVE_MANUAL_EXPERTO = "EXPERTO2026"
+# Claves de respaldo manual
+CLAVE_ESTANDAR = "ESTANDAR2026"
+CLAVE_EXPERTO = "EXPERTO2026"
 
 # =========================================================================
-# 💳 CONTROL DE ACCESO (Automático + Manual)
+# 💳 CONTROL DE ACCESO
 # =========================================================================
 st.set_page_config(page_title="Predictor Mundial", page_icon="⚽", layout="centered")
 
@@ -24,12 +23,12 @@ if "premium_estandar" not in st.session_state:
 if "premium_experto" not in st.session_state:
     st.session_state["premium_experto"] = False
 
-# Validación automática por link
+# Validación automática por link de Mercado Pago
 if "status" in parametros and parametros["status"] == "approved":
-    tipo_suscripcion = parametros.get("plan", "ninguno")
-    if tipo_suscripcion == "mensual_estandar":
+    plan = parametros.get("plan", "ninguno")
+    if plan == "mensual_estandar":
         st.session_state["premium_estandar"] = True
-    elif tipo_suscripcion == "mensual_experto":
+    elif plan == "mensual_experto":
         st.session_state["premium_estandar"] = True
         st.session_state["premium_experto"] = True
 
@@ -72,24 +71,22 @@ if opcion == "🔮 Generar Predicción":
             st.write(f"🔹 **{equipo_b}:** {prob_b}%")
             st.write(f"🔹 **Empate:** {prob_empate}%")
 
-# PESTAÑA 2: PARTIDOS EN VIVO (VERSION OPTIMIZADA PARA ANDROID)
+# PESTAÑA 2: PARTIDOS EN VIVO (100% BLINDADA PARA CELULARES)
 elif opcion == "📺 Partidos en Vivo":
-    st.title("📺 Marcador en Directo")
-    st.write("Seguí los resultados del fútbol mundial en tiempo real.")
-    
-    # Botón de seguridad: Abre el marcador nativo externo (100% efectivo en Android)
-    st.link_button("🚀 Abrir Marcador en Vivo (Pantalla Completa)", "https://www.scoreaxis.com/live-scores", type="primary", use_container_width=True)
+    st.title("📺 Marcadores en Directo")
+    st.write("Seguí todos los partidos de la jornada en tiempo real con las plataformas más rápidas:")
     
     st.markdown("---")
-    st.caption("🤖 Versión integrada (si tu celular la bloquea, usa el botón de arriba):")
     
-    # Código reducido y optimizado sin parámetros pesados para evitar el Error 500
-    html_marcador = """
-    <iframe src="https://www.scoreaxis.com/widget/live-match-center?bodyBackground=%231a1a1a&textColor=%23ffffff" 
-            width="100%" height="500" style="border:none; border-radius:8px;">
-    </iframe>
-    """
-    components.html(html_marcador, height=520, scrolling=False)
+    # Botones nativos directos (No se rompen ni se bloquean nunca)
+    st.link_button("🔥 Abrir Promiedos (Recomendado)", "https://www.promiedos.com.ar", type="primary", use_container_width=True)
+    
+    st.write("")
+    
+    st.link_button("🏆 Abrir Flashscore Argentina", "https://www.flashscore.com.ar", use_container_width=True)
+    
+    st.markdown("---")
+    st.info("💡 **Información:** Usamos enlaces directos porque las empresas de telefonía móvil bloquean los marcadores integrados dentro de las aplicaciones por motivos de privacidad.")
 
 # PESTAÑA 3: HISTORIAL PREMIUM
 elif opcion == "📜 Historial Premium":
@@ -111,7 +108,7 @@ elif opcion == "📜 Historial Premium":
         st.write("📅 *Historial* | ⚔️ **Argentina** (52%) vs **Brasil** (38%) | Empate: 10%")
         st.markdown("---")
         st.warning("⭐ ¿Querés los consejos de apuestas del Plan Experto?")
-        st.link_button("🚀 Subir a Plan Experto", LINK_SUSCRIPCION_EXPERTO, use_container_width=True)
+        st.link_button("🚀 Subir a Plan Experto", LINK_EXPERTO, use_container_width=True)
 
     else:
         st.error("🔒 Sección Exclusiva por Suscripción")
@@ -121,25 +118,24 @@ elif opcion == "📜 Historial Premium":
         with col1:
             st.markdown("### 🥉 Plan Estándar\n**$1.890 / mes**")
             st.write("✅ Historial completo de partidos.")
-            st.link_button("💳 Suscribirme Estándar", LINK_SUSCRIPCION_ESTANDAR, use_container_width=True)
+            st.link_button("💳 Suscribirme Estándar", LINK_ESTANDAR, use_container_width=True)
             
         with col2:
             st.markdown("### 🥇 Plan Experto\n**$3.890 / mes**")
             st.write("✅ Todo lo del plan Estándar.")
             st.write("🔥 **Consejos de apuestas y alertas.**")
-            st.link_button("⚡ ¡Suscribirme Experto!", LINK_SUSCRIPCION_EXPERTO, type="primary", use_container_width=True)
+            st.link_button("⚡ ¡Suscribirme Experto!", LINK_EXPERTO, type="primary", use_container_width=True)
             
         st.markdown("---")
-        st.caption("¿Ya pagaste y no se desbloqueó automáticamente? Ingresá el código que te envió el administrador:")
+        st.caption("¿Ya pagaste y no se desbloqueó automáticamente? Ingresá el código:")
         codigo_ingresado = st.text_input("🔑 Código de activación:", type="password")
         
-        if codigo_ingresado == CLAVE_MANUAL_ESTANDAR:
+        if codigo_ingresado == CLAVE_ESTANDAR:
             st.session_state["premium_estandar"] = True
             st.rerun()
-        elif codigo_ingresado == CLAVE_MANUAL_EXPERTO:
+        elif codigo_ingresado == CLAVE_EXPERTO:
             st.session_state["premium_estandar"] = True
             st.session_state["premium_experto"] = True
             st.rerun()
         elif codigo_ingresado != "":
-            st.error("Código incorrecto. Verificalo con el administrador.")
-        
+            st.error("Código incorrecto.")
