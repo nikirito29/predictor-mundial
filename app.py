@@ -6,28 +6,27 @@ import streamlit.components.v1 as components
 st.set_page_config(page_title="Predictor Mundial", page_icon="⚽", layout="centered")
 
 # =========================================================================
-# 💳 CONTROL DE ACCESO AUTOMÁTICO POR NIVELES (Mercado Pago)
+# 💳 CONTROL DE ACCESO AUTOMÁTICO POR SUSCRIPCIÓN
 # =========================================================================
 parametros = st.query_params
 
-# Inicializamos los estados de suscripción si no existen
 if "premium_estandar" not in st.session_state:
     st.session_state["premium_estandar"] = False
 if "premium_experto" not in st.session_state:
     st.session_state["premium_experto"] = False
 
-# Leemos qué pase compró el usuario según la URL de retorno
+# Verificamos la suscripción activa según la URL de retorno de Mercado Pago
 if "status" in parametros and parametros["status"] == "approved":
-    tipo_pase = parametros.get("pase", "ninguno")
-    if tipo_pase == "estandar":
+    tipo_suscripcion = parametros.get("plan", "ninguno")
+    if tipo_suscripcion == "mensual_estandar":
         st.session_state["premium_estandar"] = True
-    elif tipo_pase == "experto":
+    elif tipo_suscripcion == "mensual_experto":
         st.session_state["premium_estandar"] = True
         st.session_state["premium_experto"] = True
 
-# ⚠️ CONFIGURACIÓN: Pegá acá tus dos links de Mercado Pago
-LINK_ESTANDAR = "https://link.mercadopago.com.ar/tu-link-estandar"
-LINK_EXPERTO = "https://link.mercadopago.com.ar/tu-link-experto"
+# ⚠️ CONFIGURACIÓN: Pegá acá tus dos links de SUSCRIPCIÓN de Mercado Pago
+LINK_SUSCRIPCION_ESTANDAR = "https://www.mercadopago.com.ar/subscriptions/tu-link-suscripcion-estandar"
+LINK_SUSCRIPCION_EXPERTO = "https://www.mercadopago.com.ar/subscriptions/tu-link-suscripcion-experto"
 
 # =========================================================================
 # ☰ MENÚ DE NAVEGACIÓN
@@ -82,52 +81,40 @@ elif opcion == "📺 Partidos en Vivo":
     """
     components.html(html_marcador, height=650, scrolling=True)
 
-# PESTAÑA 3: HISTORIAL PREMIUM (Doble Nivel)
+# PESTAÑA 3: HISTORIAL PREMIUM
 elif opcion == "📜 Historial Premium":
     st.title("📜 Centro de Datos Premium")
     
-    # CASO 1: Tiene acceso EXPERTO (Ve todo)
     if st.session_state["premium_experto"]:
-        st.success("👑 ¡Acceso EXPERTO VIP Verificado!")
-        
+        st.success("👑 ¡Suscripción EXPERTO VIP Activa!")
         tab1, tab2 = st.tabs(["🗂️ Historial General", "🔥 Datos de Oro (Expertos)"])
-        
         with tab1:
             st.write("📅 *Hoy* | ⚔️ **Argentina** (52%) vs **Brasil** (38%) | Empate: 10%")
-            st.write("📅 *Ayer* | ⚔️ **Francia** (45%) vs **España** (40%) | Empate: 15%")
-        
         with tab2:
             st.subheader("💡 Consejos de Simulación Avanzada")
-            st.info("📌 **Tendencia:** Argentina mantiene una racha de 5 partidos invicto local. Alta probabilidad de menos de 2.5 goles.")
-            st.info("📌 **Alerta de Sorpresa:** Alemania muestra un rendimiento simulado superior al 60% frente a rivales europeos este mes.")
+            st.info("📌 **Tendencia:** Alta probabilidad de menos de 2.5 goles en el próximo partido.")
 
-    # CASO 2: Tiene acceso ESTÁNDAR (Ve solo el historial)
     elif st.session_state["premium_estandar"]:
-        st.success("🔓 ¡Acceso Estándar Verificado!")
+        st.success("🔓 ¡Suscripción Estándar Activa!")
         st.subheader("🗂️ Registro de Predicciones Recientes")
         st.write("📅 *Hoy* | ⚔️ **Argentina** (52%) vs **Brasil** (38%) | Empate: 10%")
-        st.write("📅 *Ayer* | ⚔️ **Francia** (45%) vs **España** (40%) | Empate: 15%")
-        
         st.markdown("---")
-        st.warning("⭐ ¿Querés los consejos de apuestas del Pase Experto?")
-        st.link_button("🚀 Subir a Pase Experto", LINK_EXPERTO, use_container_width=True)
+        st.warning("⭐ ¿Querés los consejos de apuestas del Plan Experto?")
+        st.link_button("🚀 Subir a Plan Experto", LINK_SUSCRIPCION_EXPERTO, use_container_width=True)
 
-    # CASO 3: No pagó nada todavía (Muro de pago doble)
     else:
-        st.error("🔒 Sección Exclusiva")
-        st.write("Elegí el plan que mejor se adapte a tu estilo de juego para desbloquear las herramientas estadísticas:")
+        st.error("🔒 Sección Exclusiva por Suscripción")
+        st.write("Suscribite mensualmente para desbloquear las mejores herramientas estadísticas de fútbol. Podés cancelar cuando quieras.")
         
         col1, col2 = st.columns(2)
-        
         with col1:
-            st.markdown("### 🥉 Pase Estándar\n**$2.990** (Único)")
+            st.markdown("### 🥉 Plan Estándar\n**$1.490 / mes**")
             st.write("✅ Historial completo de partidos.")
-            st.write("✅ Registro de porcentajes.")
-            st.link_button("💳 Comprar Estándar", LINK_ESTANDAR, use_container_width=True)
+            st.link_button("💳 Suscribirme Estándar", LINK_SUSCRIPCION_ESTANDAR, use_container_width=True)
             
         with col2:
-            st.markdown("### 🥇 Pase Experto\n**$6.990** (Único)")
-            st.write("✅ Todo lo del pase Estándar.")
-            st.write("🔥 **Consejos de apuestas y rachas.**")
-            st.write("🔥 **Alertas de partidos sorpresa.**")
-            st.link_button("⚡ ¡Comprar Experto!", LINK_EXPERTO, type="primary", use_container_width=True)
+            st.markdown("### 🥇 Plan Experto\n**$2.990 / mes**")
+            st.write("✅ Todo lo del plan Estándar.")
+            st.write("🔥 **Consejos de apuestas y alertas.**")
+            st.link_button("⚡ ¡Suscribirme Experto!", LINK_SUSCRIPCION_EXPERTO, type="primary", use_container_width=True)
+    
