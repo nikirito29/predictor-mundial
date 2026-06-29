@@ -2,11 +2,11 @@ import streamlit as st
 import random
 
 # =========================================================================
-# ⚠️ CONFIGURACIÓN: REEMPLAZÁ LO QUE ESTÁ ENTRÉ COMILLAS POR TUS LINKS REALES
+# ⚠️ CONFIGURACIÓN: REEMPLAZÁ LO QUE ESTÁ ENTRE COMILLAS POR TUS LINKS REALES
 # Asegurate de que no quede ningún espacio en blanco al inicio de estas líneas.
 # =========================================================================
-LINK_ESTANDAR = "https://mpago.la/2Qg9r9o"
-LINK_EXPERTO = "https://mpago.la/21S6rF8"
+LINK_ESTANDAR = "https://www.mercadopago.com.ar"
+LINK_EXPERTO = "https://www.mercadopago.com.ar"
 
 # Claves para activación manual de respaldo
 CLAVE_ESTANDAR = "ESTANDAR2026"
@@ -103,19 +103,27 @@ elif opcion == "📜 Historial Premium":
         st.markdown("---")
         st.warning("⭐ ¿Querés los consejos de apuestas del Plan Experto?")
         st.link_button("🚀 Subir a Plan Experto", LINK_EXPERTO, use_container_width=True)
+        st.caption("Si falla el botón dentro de la App, copiá este link y pegalo en Chrome:")
+        st.code(LINK_EXPERTO, language="text")
 
     else:
         st.error("🔒 Sección Exclusiva por Suscripción")
         st.write("Suscribite para desbloquear las herramientas estadísticas.")
         
+        st.info("💡 **Tip para la App:** Si los botones azules de Mercado Pago se bloquean en tu celular, copiá el link alternativo gris de abajo y pegalo directamente en tu navegador Google Chrome.")
+        
         col1, col2 = st.columns(2)
         with col1:
             st.markdown("### 🥉 Plan Estándar\n**$1.890 / mes**")
             st.link_button("💳 Suscribirme Estándar", LINK_ESTANDAR, use_container_width=True)
+            st.caption("📋 Copiar link alternativo:")
+            st.code(LINK_ESTANDAR, language="text")
             
         with col2:
             st.markdown("### 🥇 Plan Experto\n**$3.890 / mes**")
             st.link_button("⚡ ¡Suscribirme Experto!", LINK_EXPERTO, type="primary", use_container_width=True)
+            st.caption("📋 Copiar link alternativo:")
+            st.code(LINK_EXPERTO, language="text")
             
         st.markdown("---")
         st.caption("¿Ya pagaste? Ingresá el código de activación manual:")
