@@ -2,12 +2,13 @@ import streamlit as st
 import random
 
 # =========================================================================
-# ⚠️ CONFIGURACIÓN: Pegá tus links reales acá (van pegados al borde izquierdo)
+# ⚠️ CONFIGURACIÓN: REEMPLAZÁ LO QUE ESTÁ ENTRÉ COMILLAS POR TUS LINKS REALES
+# Asegurate de que no quede ningún espacio en blanco al inicio de estas líneas.
 # =========================================================================
-LINK_ESTANDAR = "https://www.mercadopago.com.ar/subscriptions/tu-link-suscripcion-estandar"
-LINK_EXPERTO = "https://www.mercadopago.com.ar/subscriptions/tu-link-suscripcion-experto"
+LINK_ESTANDAR = "https://mpago.la/2Qg9r9o"
+LINK_EXPERTO = "https://mpago.la/21S6rF8"
 
-# Claves de respaldo manual
+# Claves para activación manual de respaldo
 CLAVE_ESTANDAR = "ESTANDAR2026"
 CLAVE_EXPERTO = "EXPERTO2026"
 
@@ -23,7 +24,7 @@ if "premium_estandar" not in st.session_state:
 if "premium_experto" not in st.session_state:
     st.session_state["premium_experto"] = False
 
-# Validación automática por link de Mercado Pago
+# Validación automática por retorno de Mercado Pago
 if "status" in parametros and parametros["status"] == "approved":
     plan = parametros.get("plan", "ninguno")
     if plan == "mensual_estandar":
@@ -71,22 +72,15 @@ if opcion == "🔮 Generar Predicción":
             st.write(f"🔹 **{equipo_b}:** {prob_b}%")
             st.write(f"🔹 **Empate:** {prob_empate}%")
 
-# PESTAÑA 2: PARTIDOS EN VIVO (100% BLINDADA PARA CELULARES)
+# PESTAÑA 2: PARTIDOS EN VIVO (100% ESTABLE)
 elif opcion == "📺 Partidos en Vivo":
     st.title("📺 Marcadores en Directo")
     st.write("Seguí todos los partidos de la jornada en tiempo real con las plataformas más rápidas:")
-    
     st.markdown("---")
-    
-    # Botones nativos directos (No se rompen ni se bloquean nunca)
     st.link_button("🔥 Abrir Promiedos (Recomendado)", "https://www.promiedos.com.ar", type="primary", use_container_width=True)
-    
     st.write("")
-    
     st.link_button("🏆 Abrir Flashscore Argentina", "https://www.flashscore.com.ar", use_container_width=True)
-    
     st.markdown("---")
-    st.info("💡 **Información:** Usamos enlaces directos porque las empresas de telefonía móvil bloquean los marcadores integrados dentro de las aplicaciones por motivos de privacidad.")
 
 # PESTAÑA 3: HISTORIAL PREMIUM
 elif opcion == "📜 Historial Premium":
@@ -112,23 +106,20 @@ elif opcion == "📜 Historial Premium":
 
     else:
         st.error("🔒 Sección Exclusiva por Suscripción")
-        st.write("Suscribite para desbloquear las herramientas estadísticas. Podés cancelar cuando quieras.")
+        st.write("Suscribite para desbloquear las herramientas estadísticas.")
         
         col1, col2 = st.columns(2)
         with col1:
             st.markdown("### 🥉 Plan Estándar\n**$1.890 / mes**")
-            st.write("✅ Historial completo de partidos.")
             st.link_button("💳 Suscribirme Estándar", LINK_ESTANDAR, use_container_width=True)
             
         with col2:
             st.markdown("### 🥇 Plan Experto\n**$3.890 / mes**")
-            st.write("✅ Todo lo del plan Estándar.")
-            st.write("🔥 **Consejos de apuestas y alertas.**")
             st.link_button("⚡ ¡Suscribirme Experto!", LINK_EXPERTO, type="primary", use_container_width=True)
             
         st.markdown("---")
-        st.caption("¿Ya pagaste y no se desbloqueó automáticamente? Ingresá el código:")
-        codigo_ingresado = st.text_input("🔑 Código de activación:", type="password")
+        st.caption("¿Ya pagaste? Ingresá el código de activación manual:")
+        codigo_ingresado = st.text_input("🔑 Código:", type="password")
         
         if codigo_ingresado == CLAVE_ESTANDAR:
             st.session_state["premium_estandar"] = True
