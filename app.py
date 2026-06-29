@@ -28,7 +28,6 @@ LINK_SUSCRIPCION_EXPERTO = "https://www.mercadopago.com.ar/subscriptions/TU_LINK
 # ⚠️ CONFIGURACIÓN: Pegá acá tus dos links de SUSCRIPCIÓN de Mercado Pago
 LINK_SUSCRIPCION_ESTANDAR = "https://www.mercadopago.com.ar/subscriptions/tu-link-suscripcion-estandar"
 LINK_SUSCRIPCION_EXPERTO = "https://www.mercadopago.com.ar/subscriptions/tu-link-suscripcion-experto"
-
 # =========================================================================
 # ☰ MENÚ DE NAVEGACIÓN
 # =========================================================================
