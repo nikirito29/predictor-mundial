@@ -7,16 +7,25 @@ st.set_page_config(page_title="Predictor Mundial", page_icon="⚽", layout="cent
 st.title("⚽ Predictor Mundial")
 st.write("¡Bienvenido! Seleccioná dos selecciones para calcular las probabilidades de victoria basadas en nuestro motor estadístico.")
 
-# Lista de países para el predictor
-equipos = ["Argentina", "Brasil", "Francia", "España", "Alemania", "Uruguay", "Inglaterra", "Italia", "Portugal", "Países Bajos"]
+# Lista extendida y ordenada de países
+equipos = [
+    "Alemania", "Arabia Saudita", "Argelia", "Argentina", "Australia", 
+    "Bélgica", "Bolivia", "Brasil", "Canadá", "Chile", 
+    "Colombia", "Corea del Sur", "Costa Rica", "Croacia", "Dinamarca", 
+    "Ecuador", "Egipto", "Escocia", "España", "Estados Unidos", 
+    "Francia", "Gales", "Ghana", "Inglaterra", "Irán", 
+    "Italia", "Japón", "Marruecos", "México", "Nigeria", 
+    "Países Bajos", "Paraguay", "Perú", "Portugal", "Qatar", 
+    "Senegal", "Serbia", "Suiza", "Túnez", "Uruguay", "Venezuela"
+]
 
 col1, col2 = st.columns(2)
 
 with col1:
-    equipo_a = st.selectbox("Equipo Local (A):", equipos, index=0)
+    equipo_a = st.selectbox("Equipo Local (A):", equipos, index=3) # Por defecto: Argentina
 
 with col2:
-    equipo_b = st.selectbox("Equipo Visitante (B):", equipos, index=1)
+    equipo_b = st.selectbox("Equipo Visitante (B):", equipos, index=7) # Por defecto: Brasil
 
 if st.button("🔮 Calcular Predicción", use_container_width=True):
     if equipo_a == equipo_b:
@@ -37,3 +46,4 @@ if st.button("🔮 Calcular Predicción", use_container_width=True):
             st.success(f"🏆 Favorito: El análisis favorece a **{equipo_a}**.")
         else:
             st.success(f"🏆 Favorito: El análisis favorece a **{equipo_b}**.")
+            
