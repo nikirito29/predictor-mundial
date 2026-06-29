@@ -19,7 +19,8 @@ if "premium_experto" not in st.session_state:
 if "status" in parametros and parametros["status"] == "approved":
     tipo_suscripcion = parametros.get("plan", "ninguno")
     if tipo_suscripcion == "mensual_estandar":
-        st.session_state["premium_estandar"] = True
+    LINK_SUSCRIPCION_ESTANDAR = "https://www.mercadopago.com.ar/subscriptions/TU_LINK_REAL_ACA"
+LINK_SUSCRIPCION_EXPERTO = "https://www.mercadopago.com.ar/subscriptions/TU_LINK_REAL_ACA"
     elif tipo_suscripcion == "mensual_experto":
         st.session_state["premium_estandar"] = True
         st.session_state["premium_experto"] = True
