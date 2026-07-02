@@ -8,7 +8,7 @@ st.write("Acá podés ver los partidos programados para hoy y sus resultados en 
 
 # 1. Configura tu token gratuito acá abajo:
 # (Pegá acá adentro el código que te llegó por mail)
-API_TOKEN = "TU_TOKEN_GRATUITO_ACA" 
+API_TOKEN = "a1b2c3d4e5f6g7h8i9j0"
 
 def cargar_partidos_hoy():
     url = "https://api.football-data.org/v4/matches"
