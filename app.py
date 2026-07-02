@@ -1,140 +1,69 @@
 import streamlit as st
-import random
+import requests
+from datetime import datetime
 
-# =========================================================================
-# ⚠️ CONFIGURACIÓN: REEMPLAZÁ LO QUE ESTÁ ENTRE COMILLAS POR TUS LINKS REALES
-# Asegurate de que no quede ningún espacio en blanco al inicio de estas líneas.
-# =========================================================================
-LINK_ESTANDAR = "https://mpago.la/2Qg9r9o"
-LINK_EXPERTO = "https://mpago.la/21S6rF8"
+# --- SECCIÓN: PARTIDOS EN VIVO ---
+st.title("📺 Partidos del Día")
+st.write("Acá podés ver los partidos programados para hoy y sus resultados en tiempo real.")
 
-# Claves para activación manual de respaldo
-CLAVE_ESTANDAR = "ESTANDAR2026"
-CLAVE_EXPERTO = "EXPERTO2026"
+# 1. Configura tu token gratuito acá abajo:
+# (Pegá acá adentro el código que te llegó por mail)
+API_TOKEN = "TU_TOKEN_GRATUITO_ACA" 
 
-# =========================================================================
-# 💳 CONTROL DE ACCESO
-# =========================================================================
-st.set_page_config(page_title="Predictor Mundial", page_icon="⚽", layout="centered")
+def cargar_partidos_hoy():
+    url = "https://api.football-data.org/v4/matches"
+    headers = {"X-Auth-Token": API_TOKEN}
+    
+    try:
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            return response.json().get("matches", [])
+        else:
+            return []
+    except:
+        return []
 
-parametros = st.query_params
+# Llamamos a la API para traer la lista
+lista_partidos = cargar_partidos_hoy()
 
-if "premium_estandar" not in st.session_state:
-    st.session_state["premium_estandar"] = False
-if "premium_experto" not in st.session_state:
-    st.session_state["premium_experto"] = False
-
-# Validación automática por retorno de Mercado Pago
-if "status" in parametros and parametros["status"] == "approved":
-    plan = parametros.get("plan", "ninguno")
-    if plan == "mensual_estandar":
-        st.session_state["premium_estandar"] = True
-    elif plan == "mensual_experto":
-        st.session_state["premium_estandar"] = True
-        st.session_state["premium_experto"] = True
-
-# =========================================================================
-# ☰ MENÚ DE NAVEGACIÓN
-# =========================================================================
-opcion = st.sidebar.radio("Menú de la App", ["🔮 Generar Predicción", "📺 Partidos en Vivo", "📜 Historial Premium"])
-
-equipos = [
-    "Alemania", "Arabia Saudita", "Argelia", "Argentina", "Australia", 
-    "Bélgica", "Bolivia", "Brasil", "Canadá", "Chile", 
-    "Colombia", "Corea del Sur", "Costa Rica", "Croacia", "Dinamarca", 
-    "Ecuador", "Egipto", "Escocia", "España", "Estados Unidos", 
-    "Francia", "Gales", "Ghana", "Inglaterra", "Irán", 
-    "Italia", "Japón", "Marruecos", "México", "Nigeria", 
-    "Países Bajos", "Paraguay", "Perú", "Portugal", "Qatar", 
-    "Senegal", "Serbia", "Suiza", "Túnez", "Uruguay", "Venezuela"
-]
-
-# PESTAÑA 1: PREDICTOR
-if opcion == "🔮 Generar Predicción":
-    st.title("⚽ Predictor Mundial")
-    st.write("Seleccioná dos selecciones para calcular las probabilidades de victoria.")
+if lista_partidos:
+    # Si la API devolvió partidos, los mostramos organizados
+    for partido in lista_partidos:
+        competicion = partido["competition"]["name"]
+        equipo_local = partido["homeTeam"]["name"]
+        equipo_vis = partido["awayTeam"]["name"]
+        estado = partido["status"]
+        
+        # Traducimos y formateamos los resultados según el estado del partido
+        if estado == "FINISHED":
+            goles_local = partido["score"]["fullTime"]["home"]
+            goles_vis = partido["score"]["fullTime"]["away"]
+            info_partido = f"🏁 **Finalizado:** {goles_local} - {goles_vis}"
+            
+        elif estado == "IN_PLAY" or estado == "PAUSED":
+            goles_local = partido["score"]["fullTime"]["home"]
+            goles_vis = partido["score"]["fullTime"]["away"]
+            info_partido = f"🔴 **En Vivo:** {goles_local} - {goles_vis}"
+            
+        else:
+            # Si todavía no empezó, extraemos la hora (viene en formato UTC)
+            hora_utc = partido["utcDate"].split("T")[1][:5]
+            info_partido = f"⏰ **Próximamente:** {hora_utc} UTC"
+        
+        # Mostramos el partido de forma estética
+        with st.container():
+            st.markdown(f"🏆 *{competicion}*")
+            st.subheader(f"{equipo_local}  vs  {equipo_vis}")
+            st.write(info_partido)
+            st.divider()
+else:
+    # Si la API falla o no hay partidos hoy, mostramos un aviso y los botones de respaldo
+    st.info("No se pudieron sincronizar partidos automáticos para hoy o la API alcanzó su límite gratuito.")
+    st.write("Podés revisar el minuto a minuto de forma externa acá:")
     
     col1, col2 = st.columns(2)
     with col1:
-        equipo_a = st.selectbox("Equipo Local (A):", equipos, index=3)
+        st.link_button("🇦🇷 Ver en Promiedos", "https://www.promiedos.com.ar")
     with col2:
-        equipo_b = st.selectbox("Equipo Visitante (B):", equipos, index=7)
+        st.link_button("🌐 Ver en Flashscore", "https://www.flashscore.com")
         
-    if st.button("🔮 Calcular Predicción", use_container_width=True):
-        if equipo_a == equipo_b:
-            st.warning("⚠️ Por favor, seleccioná dos equipos diferentes.")
-        else:
-            st.subheader("📊 Resultados del Análisis")
-            prob_a = random.randint(35, 55)
-            prob_b = random.randint(25, 45)
-            prob_empate = 100 - prob_a - prob_b
-            st.write(f"🔹 **{equipo_a}:** {prob_a}%")
-            st.write(f"🔹 **{equipo_b}:** {prob_b}%")
-            st.write(f"🔹 **Empate:** {prob_empate}%")
-
-# PESTAÑA 2: PARTIDOS EN VIVO (100% ESTABLE)
-elif opcion == "📺 Partidos en Vivo":
-    st.title("📺 Marcadores en Directo")
-    st.write("Seguí todos los partidos de la jornada en tiempo real con las plataformas más rápidas:")
-    st.markdown("---")
-    st.link_button("🔥 Abrir Promiedos (Recomendado)", "https://www.promiedos.com.ar", type="primary", use_container_width=True)
-    st.write("")
-    st.link_button("🏆 Abrir Flashscore Argentina", "https://www.flashscore.com.ar", use_container_width=True)
-    st.markdown("---")
-
-# PESTAÑA 3: HISTORIAL PREMIUM
-elif opcion == "📜 Historial Premium":
-    st.title("📜 Centro de Datos Premium")
-    
-    if st.session_state["premium_experto"]:
-        st.success("👑 ¡Suscripción EXPERTO VIP Activa!")
-        tab1, tab2 = st.tabs(["🗂️ Historial General", "🔥 Datos de Oro (Expertos)"])
-        with tab1:
-            st.write("📅 *Historial* | ⚔️ **Argentina** (52%) vs **Brasil** (38%) | Empate: 10%")
-            st.write("📅 *Historial* | ⚔️ **Francia** (45%) vs **España** (40%) | Empate: 15%")
-        with tab2:
-            st.subheader("💡 Consejos de Simulación Avanzada")
-            st.info("📌 **Tendencia:** Alta probabilidad de menos de 2.5 goles en el próximo partido de Argentina.")
-
-    elif st.session_state["premium_estandar"]:
-        st.success("🔓 ¡Suscripción Estándar Activa!")
-        st.subheader("🗂️ Registro de Predicciones Recientes")
-        st.write("📅 *Historial* | ⚔️ **Argentina** (52%) vs **Brasil** (38%) | Empate: 10%")
-        st.markdown("---")
-        st.warning("⭐ ¿Querés los consejos de apuestas del Plan Experto?")
-        st.link_button("🚀 Subir a Plan Experto", LINK_EXPERTO, use_container_width=True)
-        st.caption("Si falla el botón dentro de la App, copiá este link y pegalo en Chrome:")
-        st.code(LINK_EXPERTO, language="text")
-
-    else:
-        st.error("🔒 Sección Exclusiva por Suscripción")
-        st.write("Suscribite para desbloquear las herramientas estadísticas.")
-        
-        st.info("💡 **Tip para la App:** Si los botones azules de Mercado Pago se bloquean en tu celular, copiá el link alternativo gris de abajo y pegalo directamente en tu navegador Google Chrome.")
-        
-        col1, col2 = st.columns(2)
-        with col1:
-            st.markdown("### 🥉 Plan Estándar\n**$1.890 / mes**")
-            st.link_button("💳 Suscribirme Estándar", LINK_ESTANDAR, use_container_width=True)
-            st.caption("📋 Copiar link alternativo:")
-            st.code(LINK_ESTANDAR, language="text")
-            
-        with col2:
-            st.markdown("### 🥇 Plan Experto\n**$3.890 / mes**")
-            st.link_button("⚡ ¡Suscribirme Experto!", LINK_EXPERTO, type="primary", use_container_width=True)
-            st.caption("📋 Copiar link alternativo:")
-            st.code(LINK_EXPERTO, language="text")
-            
-        st.markdown("---")
-        st.caption("¿Ya pagaste? Ingresá el código de activación manual:")
-        codigo_ingresado = st.text_input("🔑 Código:", type="password")
-        
-        if codigo_ingresado == CLAVE_ESTANDAR:
-            st.session_state["premium_estandar"] = True
-            st.rerun()
-        elif codigo_ingresado == CLAVE_EXPERTO:
-            st.session_state["premium_estandar"] = True
-            st.session_state["premium_experto"] = True
-            st.rerun()
-        elif codigo_ingresado != "":
-            st.error("Código incorrecto.")
