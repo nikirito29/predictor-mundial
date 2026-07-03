@@ -6,7 +6,7 @@ st.markdown("""
     <style>
     .block-container { padding-top: 2rem; padding-bottom: 2rem; }
     </style>
-""", unsafe-allow_html=True)
+""", unsafe_allow_html=True)
 
 # --- 1. BANNER DESTACADO (Arriba de todo) ---
 st.markdown("### 🔥 Partido Destacado de Hoy")
