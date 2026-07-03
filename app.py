@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-# Configuración inicial de estilo (Opcional, sumará al look de app móvil)
+# Configuración inicial de estilo
 st.markdown("""
     <style>
     .block-container { padding-top: 2rem; padding-bottom: 2rem; }
@@ -20,7 +20,7 @@ with st.container(border=True):
 
 st.write("") # Espacio visual
 
-# --- 2. SECCIONES POR PESTAÑAS (Estilo selector de deportes) ---
+# --- 2. SECCIONES POR PESTAÑAS ---
 st.markdown("### 📊 Competiciones")
 tab_mundial, tab_ligas, tab_externo = st.tabs([
     "🏆 Mundial 2026", 
@@ -56,7 +56,6 @@ with tab_mundial:
             visita = partido["awayTeam"]["name"]
             estado = partido["status"]
             
-            # Formateo de marcador según estado
             if estado in ["IN_PLAY", "PAUSED", "FINISHED"]:
                 g_local = partido["score"]["fullTime"]["home"]
                 g_visita = partido["score"]["fullTime"]["away"]
@@ -66,26 +65,23 @@ with tab_mundial:
                 marcador = "vs"
                 badge = f"⏰ {partido['utcDate'].split('T')[1][:5]} UTC"
 
-            # Creamos la "cajita" o tarjeta individual para el partido
             with st.container(border=True):
                 c1, c2, c3 = st.columns([3, 2, 3])
                 with c1:
-                    st.markdown(f"<p style='text-align: right;'><b>{local}</b></p>", unsafe-allow_html=True)
+                    st.markdown(f"<p style='text-align: right;'><b>{local}</b></p>", unsafe_allow_html=True)
                 with c2:
-                    st.markdown(f"<p style='text-align: center;'>{marcador}<br><small>{badge}</small></p>", unsafe-allow_html=True)
+                    st.markdown(f"<p style='text-align: center;'>{marcador}<br><small>{badge}</small></p>", unsafe_allow_html=True)
                 with c3:
-                    st.markdown(f"<p style='text-align: left;'><b>{visita}</b></p>", unsafe-allow_html=True)
+                    st.markdown(f"<p style='text-align: left;'><b>{visita}</b></p>", unsafe_allow_html=True)
     else:
         st.info("No hay partidos del Mundial programados para hoy en la API.")
 
 
 # --- PESTAÑA 2: LIGAS EUROPEAS ---
 with tab_ligas:
-    # Filtramos para excluir el mundial y mostrar torneos como Premier (PL), Champions (CL), etc.
     partidos_ligas = [p for p in todos_los_partidos if p.get("competition", {}).get("code") != "WC"]
     
     if partidos_ligas:
-        # Agrupamos por liga para poner un subtítulo por torneo
         ligas_agrupadas = {}
         for p in partidos_ligas:
             nom_torneo = p["competition"]["name"]
@@ -107,17 +103,19 @@ with tab_ligas:
                     marcador = "vs"
                     badge = f"⏰ {partido['utcDate'].split('T')[1][:5]} UTC"
                 
-                # Tarjeta limpia para partidos de liga
                 with st.container(border=True):
                     c1, c2, c3 = st.columns([3, 2, 3])
-                    with c1: st.markdown(f"<p style='text-align: right;'>{local}</p>", unsafe-allow_html=True)
-                    with c2: st.markdown(f"<p style='text-align: center;'>{marcador}<br><small>{badge}</small></p>", unsafe-allow_html=True)
-                    with c3: st.markdown(f"<p style='text-align: left;'>{visita}</p>", unsafe-allow_html=True)
+                    with c1: 
+                        st.markdown(f"<p style='text-align: right;'>{local}</p>", unsafe_allow_html=True)
+                    with c2: 
+                        st.markdown(f"<p style='text-align: center;'>{marcador}<br><small>{badge}</small></p>", unsafe_allow_html=True)
+                    with c3: 
+                        st.markdown(f"<p style='text-align: left;'>{visita}</p>", unsafe_allow_html=True)
     else:
         st.info("No hay partidos de ligas europeas registrados para hoy.")
 
 
-# --- PESTAÑA 3: ENLACES EXTERNOS (PLAN B) ---
+# --- PESTAÑA 3: ENLACES EXTERNOS ---
 with tab_externo:
     st.markdown("¿Querés revisar otras categorías o el minuto a minuto detallado?")
     col1, col2 = st.columns(2)
@@ -125,3 +123,4 @@ with tab_externo:
         st.link_button("🇦🇷 Promiedos", "https://www.promiedos.com.ar", use_container_width=True)
     with col2:
         st.link_button("🌐 Flashscore", "https://www.flashscore.com", use_container_width=True)
+                        
