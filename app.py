@@ -24,7 +24,29 @@ def cargar_partidos_hoy():
         return []
 
 # Llamamos a la API para traer la lista
-lista_partidos = cargar_partidos_hoy()
+def cargar_partidos_hoy():
+    url = "https://api.football-data.org/v4/matches"
+    headers = {"X-Auth-Token": API_TOKEN}
+    
+    try:
+        response = requests.get(url, headers=headers)
+        
+        # SI LA API RESPONDE CON ERROR (Ej: Código 400, 403, 429)
+        if response.status_code != 200:
+            st.error(f"🚨 Error de la API (Código {response.status_code}): {response.text}")
+            return []
+            
+        partidos = response.json().get("matches", [])
+        
+        # SI LA API CONECTÓ BIEN PERO NO HAY PARTIDOS HOY
+        if not partidos:
+            st.warning("⚠️ La API funciona perfecto, pero hoy no hay partidos programados en sus ligas gratuitas.")
+            
+        return partidos
+    except Exception as e:
+        st.error(f"❌ Error de conexión general: {e}")
+        return []
+
 
 if lista_partidos:
     # Si la API devolvió partidos, los mostramos organizados
