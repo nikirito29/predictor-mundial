@@ -1,14 +1,18 @@
 import streamlit as st
 import requests
 
-# Configuración inicial de estilo
+# 🧠 1. MEMORIA DE LA APP: Inicializamos la variable para abrir/cerrar el formulario
+if "mostrar_formulario" not in st.session_state:
+    st.session_state.mostrar_formulario = False
+
+# Configuración inicial de estilo móvil
 st.markdown("""
     <style>
     .block-container { padding-top: 2rem; padding-bottom: 2rem; }
     </style>
 """, unsafe_allow_html=True)
 
-# --- 1. BANNER DESTACADO (Arriba de todo) ---
+# --- 2. BANNER DESTACADO (Arriba de todo) ---
 st.markdown("### 🔥 Partido Destacado de Hoy")
 with st.container(border=True):
     col_A, col_B = st.columns([2, 1])
@@ -16,11 +20,30 @@ with st.container(border=True):
         st.markdown("🇦🇷 **Argentina vs. Cabo Verde**")
         st.caption("🏆 Fase de Grupos • ¡Pronósticos abiertos!")
     with col_B:
-        st.button("🎯 Predecir", key="btn_destacado", use_container_width=True)
+        # Al tocar el botón, cambia el estado entre Verdadero y Falso
+        if st.button("🎯 Predecir", key="btn_destacado", use_container_width=True):
+            st.session_state.mostrar_formulario = not st.session_state.mostrar_formulario
+
+# 🔮 FORMULARIO INTERACTIVO: Si el usuario tocó "Predecir", se despliega esto abajo
+if st.session_state.mostrar_formulario:
+    with st.container(border=True):
+        st.markdown("#### 🔮 Ingresá tu Pronóstico Exacto")
+        col_g1, col_g2 = st.columns(2)
+        with col_g1:
+            goles_local = st.number_input("Goles Argentina", min_value=0, max_value=15, value=1, step=1, key="g_local_p")
+        with col_g2:
+            goles_visita = st.number_input("Goles Cabo Verde", min_value=0, max_value=15, value=0, step=1, key="g_visita_p")
+        
+        # Botón final dentro del formulario para confirmar el resultado
+        if st.button("Confirmar Pronóstico", type="primary", use_container_width=True):
+            st.success(f"¡Pronóstico enviado! Guardaste: **Argentina {goles_local} - {goles_visita} Cabo Verde** 🚀")
+            st.balloons() # ¡Tira globos de festejo en toda la pantalla!
+            st.session_state.mostrar_formulario = False # Cierra el panel automáticamente
+
 
 st.write("") # Espacio visual
 
-# --- 2. SECCIONES POR PESTAÑAS ---
+# --- 3. SECCIONES POR PESTAÑAS ---
 st.markdown("### 📊 Competiciones")
 tab_mundial, tab_ligas, tab_externo = st.tabs([
     "🏆 Mundial 2026", 
@@ -42,7 +65,6 @@ def obtener_partidos():
     except:
         return []
 
-# Traemos la información una sola vez
 todos_los_partidos = obtener_partidos()
 
 
@@ -67,12 +89,9 @@ with tab_mundial:
 
             with st.container(border=True):
                 c1, c2, c3 = st.columns([3, 2, 3])
-                with c1:
-                    st.markdown(f"<p style='text-align: right;'><b>{local}</b></p>", unsafe_allow_html=True)
-                with c2:
-                    st.markdown(f"<p style='text-align: center;'>{marcador}<br><small>{badge}</small></p>", unsafe_allow_html=True)
-                with c3:
-                    st.markdown(f"<p style='text-align: left;'><b>{visita}</b></p>", unsafe_allow_html=True)
+                with c1: st.markdown(f"<p style='text-align: right;'><b>{local}</b></p>", unsafe_allow_html=True)
+                with c2: st.markdown(f"<p style='text-align: center;'>{marcador}<br><small>{badge}</small></p>", unsafe_allow_html=True)
+                with c3: st.markdown(f"<p style='text-align: left;'><b>{visita}</b></p>", unsafe_allow_html=True)
     else:
         st.info("No hay partidos del Mundial programados para hoy en la API.")
 
@@ -105,12 +124,9 @@ with tab_ligas:
                 
                 with st.container(border=True):
                     c1, c2, c3 = st.columns([3, 2, 3])
-                    with c1: 
-                        st.markdown(f"<p style='text-align: right;'>{local}</p>", unsafe_allow_html=True)
-                    with c2: 
-                        st.markdown(f"<p style='text-align: center;'>{marcador}<br><small>{badge}</small></p>", unsafe_allow_html=True)
-                    with c3: 
-                        st.markdown(f"<p style='text-align: left;'>{visita}</p>", unsafe_allow_html=True)
+                    with c1: st.markdown(f"<p style='text-align: right;'>{local}</p>", unsafe_allow_html=True)
+                    with c2: st.markdown(f"<p style='text-align: center;'>{marcador}<br><small>{badge}</small></p>", unsafe_allow_html=True)
+                    with c3: st.markdown(f"<p style='text-align: left;'>{visita}</p>", unsafe_allow_html=True)
     else:
         st.info("No hay partidos de ligas europeas registrados para hoy.")
 
@@ -123,4 +139,4 @@ with tab_externo:
         st.link_button("🇦🇷 Promiedos", "https://www.promiedos.com.ar", use_container_width=True)
     with col2:
         st.link_button("🌐 Flashscore", "https://www.flashscore.com", use_container_width=True)
-                        
+                
